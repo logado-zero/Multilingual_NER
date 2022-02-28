@@ -1,0 +1,10 @@
+bson
+pandas
+scikit-learn
+sklearn-crfsuite
+tqdm
+rusenttokenize
+numpy
+nltk
+torch
+matplotlib
