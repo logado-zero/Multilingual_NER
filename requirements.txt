@@ -8,3 +8,4 @@ numpy
 nltk
 torch
 matplotlib
+pytorch-pretrained-bert
