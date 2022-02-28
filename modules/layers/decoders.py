@@ -2,8 +2,8 @@ import torch
 from torch.nn import functional
 from torch.autograd import Variable
 from torch import nn
-from layers import Linears
-from ncrf import NCRF
+from .layers import Linears
+from .ncrf import NCRF
 
 class NCRFDecoder(nn.Module):
 
