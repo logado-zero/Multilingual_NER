@@ -1,6 +1,6 @@
 from modules.data.fact_ru_val.reader import Reader
 import pandas as pd
-from modules import tqdm
+from modules.utils import get_tqdm as tqdm
 import argparse
 
 

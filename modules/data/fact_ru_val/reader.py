@@ -1,6 +1,15 @@
 import pandas as pd
-from .utils import get_file_names
+import os
 from .entity.document import Document
+
+
+def get_file_names(path):
+    res = []
+    for root, dirs, files in os.walk(path):
+        for file in files:
+            if file.endswith('.tokens'):
+                res.append(os.path.join(root, os.path.splitext(file)[0]))
+    return res
 
 
 class Reader(object):
@@ -65,3 +74,5 @@ class Reader(object):
 
     def get_text_tags(self):
         return [doc.get_tags() for doc in self.documents]
+
+
