@@ -59,8 +59,9 @@ if __name__ == "__main__":
 
     #Check file save model
     if args.checkpoint is None:
-        os.mkdir('checkpoint')
-        check_point_path = './check_point/fre-BERTBiLSTMAttnCRF-fit_BERT-IO.cpt'
+        if not os.path.exists('check_point'):
+            os.mkdir('check_point')
+        check_point_path = os.path.abspath(os.getcwd()) + '/check_point/fre-BERTBiLSTMAttnCRF-fit_BERT-IO.cpt'
     else:
         check_point_path = args.checkpoint
 
@@ -86,7 +87,7 @@ if __name__ == "__main__":
     print('Number params of model :',model.get_n_trainable_params())
     #Start training......
     learner.fit(epochs=args.num_epochs)
-    
+
 
 
 
