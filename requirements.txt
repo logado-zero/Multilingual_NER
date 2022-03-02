@@ -9,3 +9,4 @@ nltk
 torch
 matplotlib
 pytorch-pretrained-bert
+glob2
