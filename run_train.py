@@ -84,7 +84,9 @@ if __name__ == "__main__":
         t_total=args.num_epochs * len(data.train_dl), lr=0.0001)
 
     print('Number params of model :',model.get_n_trainable_params())
-
+    #Start training......
+    learner.fit(epochs=args.num_epochs)
+    
 
 
 
