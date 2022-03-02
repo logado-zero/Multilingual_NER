@@ -101,7 +101,7 @@ class NCRF(nn.Module):
             mask_idx = mask[idx, :].view(batch_size, 1).expand(batch_size, tag_size)
 
             # effective updated partition part, only keep the partition value of mask value = 1
-            mask_idx = mask_idx.byte()
+            mask_idx = mask_idx.bool()
             masked_cur_partition = cur_partition.masked_select(mask_idx)
             # let mask_idx broadcastable, to disable warning
             mask_idx = mask_idx.contiguous().view(batch_size, tag_size, 1)
@@ -148,7 +148,7 @@ class NCRF(nn.Module):
         partition_history = list()
         #  reverse mask (bug for mask = 1- mask, use this as alternative choice)
         # mask = 1 + (-1)*mask
-        mask = (1 - mask.long()).byte()
+        mask = (1 - mask.long()).bool()
         _, inivalues = next(seq_iter)  # bat_size * from_target_size * to_target_size
         # only need start from start_tag
         partition = inivalues[:, START_TAG, :].clone().view(batch_size, tag_size)  # bat_size * to_target_size
@@ -262,7 +262,7 @@ class NCRF(nn.Module):
                                                                                          batch_size)
         # seq_len * bat_size
         # mask transpose to (seq_len, batch_size)
-        mask = mask.byte()
+        mask = mask.bool()
         tg_energy = tg_energy.masked_select(mask.transpose(1, 0))
 
         # # calculate the score from START_TAG to first label
@@ -312,7 +312,7 @@ class NCRF(nn.Module):
         partition_history = list()
         #  reverse mask (bug for mask = 1- mask, use this as alternative choice)
         # mask = 1 + (-1)*mask
-        mask = (1 - mask.long()).byte()
+        mask = (1 - mask.long()).bool()
         _, inivalues = next(seq_iter)  # bat_size * from_target_size * to_target_size
         # only need start from start_tag
         partition = inivalues[:, START_TAG, :].clone()  # bat_size * to_target_size
