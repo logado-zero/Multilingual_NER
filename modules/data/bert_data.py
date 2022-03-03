@@ -80,6 +80,10 @@ class TextDataLoader(DataLoader):
 class TextDataSet(object):
 
     @classmethod
+    def from_config(cls, config, clear_cache=False, df=None):
+        return cls.create(**read_config(config), clear_cache=clear_cache, df=df)
+
+    @classmethod
     def create(cls,
                idx2labels_path,
                df_path=None,
