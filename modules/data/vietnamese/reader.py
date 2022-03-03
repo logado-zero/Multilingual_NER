@@ -19,15 +19,15 @@ def to_data_frame(src_path,des_path):
         if name == 'train':
             train_src =src
             train_tgt = tgt
-        elif name == ' test':
+        elif name == 'valid':
             test_src = src
             test_tgt = tgt
     print(root)
-    train = pd.DataFrame({"labels": map(lambda l: l.strip(),train_tgt), "text": map(lambda l: l.strip(), train_src)})
+    train = pd.DataFrame({"labels": map(lambda l: l.strip().replace("-","_").replace("B_MISC","O").replace("I_MISC","O"),train_tgt), "text": map(lambda l: l.strip(), train_src)})
     train["clf"] = train["labels"].apply(lambda x: all([y.split("_")[0] == "O" for y in x.split()]))
     train.to_csv(des_path+"/train.csv", index=False, sep="\t")
 
-    test = pd.DataFrame({"labels": map(lambda l: l.strip(),test_tgt), "text": map(lambda l: l.strip(), test_src)})
+    test = pd.DataFrame({"labels": map(lambda l: l.strip().replace("-","_").replace("B_MISC","O").replace("I_MISC","O"),test_tgt), "text": map(lambda l: l.strip(), test_src)})
     test["clf"] = train["labels"].apply(lambda x: all([y.split("_")[0] == "O" for y in x.split()]))
     test.to_csv(des_path+"/test.csv", index=False, sep="\t")
 
