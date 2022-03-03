@@ -204,6 +204,6 @@ class NerLearner(object):
         path = path if path else self.best_model_path
         torch.save(self.model.state_dict(), path)
     
-    def load_model(self, path=None):
+    def load_model(self, device = 'cpu', path=None):
         path = path if path else self.best_model_path
-        self.model.load_state_dict(torch.load(path))
+        self.model.load_state_dict(torch.load(path, map_location= device))
