@@ -47,9 +47,9 @@ if __name__ == "__main__":
     #Set path data train and test file .csv
     args = parser.parse_args()
     for file in glob2.glob(args.data_path+ '/*'):
-        if 'dev.csv' in file:
+        if 'train.csv' in file:
             train_df_path = file
-        elif 'test.csv' in file:
+        elif 'dev.csv' in file:
             valid_df_path = file
 
     #Check idx2labels.txt path
