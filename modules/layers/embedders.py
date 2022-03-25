@@ -1,20 +1,19 @@
-from transformers import BertModel
+from transformers import BertTokenizer, BertModel
 import torch
-
 class BERTEmbedder(torch.nn.Module):
     def __init__(self, model, config):
         super(BERTEmbedder, self).__init__()
         self.config = config
         self.model = model
         if self.config["mode"] == "weighted":
-            self.bert_weights = torch.nn.Parameter(torch.FloatTensor(12, 1))
+            self.bert_weights = torch.nn.Parameter(torch.FloatTensor(13, 1))
             self.bert_gamma = torch.nn.Parameter(torch.FloatTensor(1, 1))
         self.init_weights()
 
     def init_weights(self):
         if self.config["mode"] == "weighted":
-            torch.nn.init.xavier_normal_(self.bert_gamma)
-            torch.nn.init.xavier_normal_(self.bert_weights)
+            torch.nn.init.xavier_normal(self.bert_gamma)
+            torch.nn.init.xavier_normal(self.bert_weights)
 
     @classmethod
     def create(
@@ -27,6 +26,7 @@ class BERTEmbedder(torch.nn.Module):
             "mode": mode,
             "is_freeze": is_freeze
         }
+        # model = BertModel.from_pretrained(model_name)
         model = BertModel.from_pretrained(model_name,output_hidden_states=True)
         model.to(device)
         model.train()
@@ -56,7 +56,6 @@ class BERTEmbedder(torch.nn.Module):
             encoded_layers = torch.stack([a * b for a, b in zip(encoded_layers, self.bert_weights)])
             return self.bert_gamma * torch.sum(encoded_layers, dim=0)
         return encoded_layers
-
 
     def freeze(self):
         for param in self.model.parameters():
