@@ -70,7 +70,7 @@ if __name__ == "__main__":
     pred_tokens, pred_labels = bert_labels2tokens(dl, preds)
     true_tokens, true_labels = bert_labels2tokens(dl, [x.bert_labels for x in dl.dataset])
 
-    tokens_report = flat_classification_report(true_labels, pred_labels, labels=["I_ORG", "I_PER", "I_LOC","I-MISC"], digits=4)
+    tokens_report = flat_classification_report(true_labels, pred_labels, labels=["B-ORG","B-PER","B-LOC","B-MISC","I-ORG", "I-PER", "I-LOC","I-MISC"], digits=8)
     print(tokens_report)
 
 

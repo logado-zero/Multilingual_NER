@@ -1,6 +1,6 @@
 from torch.utils.data import DataLoader
 import torch
-from pytorch_pretrained_bert import BertTokenizer
+from transformers import BertTokenizer
 from modules.utils import read_config, if_none
 from tqdm import tqdm
 import pandas as pd

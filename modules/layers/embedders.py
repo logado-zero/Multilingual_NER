@@ -1,4 +1,4 @@
-from pytorch_pretrained_bert import BertModel
+from transformers import BertModel
 import torch
 
 class BERTEmbedder(torch.nn.Module):
@@ -27,7 +27,7 @@ class BERTEmbedder(torch.nn.Module):
             "mode": mode,
             "is_freeze": is_freeze
         }
-        model = BertModel.from_pretrained(model_name)
+        model = BertModel.from_pretrained(model_name,output_hidden_states=True)
         model.to(device)
         model.train()
         self = cls(model, config)
@@ -47,15 +47,16 @@ class BERTEmbedder(torch.nn.Module):
             data[2]: list, tokens type ids (for bert)
             data[3]: list, bert labels ids
         """
-        encoded_layers, _ = self.model(
+        encoded_layers_all = self.model(
             input_ids=batch[0],
             token_type_ids=batch[2],
-            attention_mask=batch[1],
-            output_all_encoded_layers=self.config["mode"] == "weighted")
+            attention_mask=batch[1])
+        encoded_layers = encoded_layers_all.hidden_states
         if self.config["mode"] == "weighted":
             encoded_layers = torch.stack([a * b for a, b in zip(encoded_layers, self.bert_weights)])
             return self.bert_gamma * torch.sum(encoded_layers, dim=0)
         return encoded_layers
+
 
     def freeze(self):
         for param in self.model.parameters():
