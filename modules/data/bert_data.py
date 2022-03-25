@@ -154,7 +154,7 @@ class TextDataSet(object):
                 else:
                     prefix = "I-"
                 if label != "O":
-                    label = label.split("_")[1]
+                    label = label.split("-")[1]
                     if label == prev_label:
                         prefix = "I-"
                     prev_label = label
@@ -214,7 +214,7 @@ class TextDataSet(object):
             else:
                 prefix = "I-"
             if label != "O":
-                label = label.split("_")[1]
+                label = label.split("-")[1]
                 if label == prev_label:
                     prefix = "I-"
                 prev_label = label
