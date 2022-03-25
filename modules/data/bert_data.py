@@ -150,13 +150,13 @@ class TextDataSet(object):
             prev_label = ""
             for origin_token, label in zip(origin_tokens, labels):
                 if markup == "BIO":
-                    prefix = "B_"
+                    prefix = "B-"
                 else:
-                    prefix = "I_"
+                    prefix = "I-"
                 if label != "O":
                     label = label.split("_")[1]
                     if label == prev_label:
-                        prefix = "I_"
+                        prefix = "I-"
                     prev_label = label
                 else:
                     prev_label = label
@@ -210,13 +210,13 @@ class TextDataSet(object):
             if self.config["max_sequence_length"] - 2 < len(bert_tokens) + len(cur_tokens):
                 break
             if self.config["markup"] == "BIO":
-                prefix = "B_"
+                prefix = "B-"
             else:
-                prefix = "I_"
+                prefix = "I-"
             if label != "O":
                 label = label.split("_")[1]
                 if label == prev_label:
-                    prefix = "I_"
+                    prefix = "I-"
                 prev_label = label
             else:
                 prev_label = label
@@ -229,9 +229,9 @@ class TextDataSet(object):
         orig_tokens = ["[CLS]"] + orig_tokens + ["[SEP]"]
         bert_labels = ["[CLS]"] + bert_labels + ["[SEP]"]
         if self.config["markup"] == "BIO":
-            O_label = self.label2idx.get("B_O")
+            O_label = self.label2idx.get("B-O")
         else:
-            O_label = self.label2idx.get("I_O")
+            O_label = self.label2idx.get("I-O")
         input_ids = self.tokenizer.convert_tokens_to_ids(['[CLS]'] + bert_tokens + ['[SEP]'])
         labels_ids = [self.label2idx.get(l, O_label) for l in bert_labels]
         # The mask has 1 for real tokens and 0 for padding tokens. Only real
