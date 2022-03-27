@@ -60,7 +60,7 @@ if __name__ == "__main__":
 
 
     #Build Learner
-    learner = NerLearner(model, data, best_model_path= args.model, t_total=100 * len(data.train_dl), lr=0.00001)
+    learner = NerLearner(model, data, best_model_path= args.model, t_total=100 * len(data.train_dl), lr=0.00001, markup = "BIO")
     learner.load_model(device = device)
 
     #Predict

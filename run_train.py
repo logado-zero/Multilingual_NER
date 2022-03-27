@@ -73,6 +73,7 @@ if __name__ == "__main__":
         idx2labels_path=idx2labels_path,
         clear_cache=True,
         batch_size=8,
+        markup = "BIO",
         device=device
         )
 
