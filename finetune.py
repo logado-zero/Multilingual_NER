@@ -71,7 +71,7 @@ if __name__ == "__main__":
         train_df_path=train_df_path,
         valid_df_path=valid_df_path,
         idx2labels_path=idx2labels_path,
-        clear_cache=True,
+        clear_cache=False,
         batch_size=8,
         markup = "BIO",
         device=device
