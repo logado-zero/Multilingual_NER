@@ -151,10 +151,10 @@ class BERTBiLSTMAttnNCRF(BERTNerModel):
         return cls(embeddings, lstm, attn, crf, device)
 
 
-class RoBERTBiLSTMAttnNCRF(BERTNerModel):
+class AutoBiLSTMAttnNCRF(BERTNerModel):
 
     def __init__(self, embeddings, lstm, attn, crf, device="cuda"):
-        super(RoBERTBiLSTMAttnNCRF, self).__init__()
+        super(AutoBiLSTMAttnNCRF, self).__init__()
         self.embeddings = embeddings
         self.lstm = lstm
         self.attn = attn
@@ -188,7 +188,7 @@ class RoBERTBiLSTMAttnNCRF(BERTNerModel):
                crf_dropout=0.5, nbest=1,
                # Global params
                device="cuda"):
-        embeddings = RoBERTEmbedder.create(model_name=model_name, device=device, mode=mode, is_freeze=is_freeze)
+        embeddings = AutoEmbedder.create(model_name=model_name, device=device, mode=mode, is_freeze=is_freeze)
         lstm = BiLSTM.create(
             embedding_size=embedding_size, hidden_dim=hidden_dim, rnn_layers=rnn_layers, dropout=lstm_dropout)
         attn = MultiHeadAttention(key_dim, val_dim, hidden_dim, num_heads, attn_dropout)

@@ -62,7 +62,7 @@ class BERTEmbedder(torch.nn.Module):
             param.requires_grad = False
 
 #############RoBERT#####################
-class RoBERTEmbedder(torch.nn.Module):
+class AutoEmbedder(torch.nn.Module):
     def __init__(self, model, config):
         super(BERTEmbedder, self).__init__()
         self.config = config

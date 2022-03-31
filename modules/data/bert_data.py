@@ -1,6 +1,6 @@
 from torch.utils.data import DataLoader
 import torch
-from transformers import BertTokenizer
+from transformers import BertTokenizer, AutoTokenizer
 from modules.utils import read_config, if_none
 from tqdm import tqdm
 import pandas as pd
@@ -97,9 +97,11 @@ class TextDataSet(object):
                clear_cache=False,
                is_cls=False,
                markup="IO",
-               df=None, tokenizer=None):
+               df=None, tokenizer=None, bert_embedding = True):
         if tokenizer is None:
-            tokenizer = BertTokenizer.from_pretrained(model_name)
+            if bert_embedding:
+                tokenizer = BertTokenizer.from_pretrained(model_name)
+            else: tokenizer = AutoTokenizer.from_pretrained(model_name)
         config = {
             "min_char_len": min_char_len,
             "model_name": model_name,
@@ -329,7 +331,7 @@ class LearnData(object):
                train_df=None,
                valid_df=None,
                # DataLoader params
-               device="cuda", batch_size=16):
+               device="cuda", batch_size=16, bert_embedding = True):
         train_ds = None
         train_dl = None
         valid_ds = None
@@ -348,7 +350,8 @@ class LearnData(object):
                 clear_cache=clear_cache,
                 is_cls=is_cls,
                 markup=markup,
-                df=train_df)
+                df=train_df,
+                bert_embedding= bert_embedding)
             if len(train_ds):
                 train_dl = TextDataLoader(train_ds, device=device, shuffle=True, batch_size=batch_size)
         if valid_df_path is not None:
