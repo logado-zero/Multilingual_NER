@@ -179,7 +179,7 @@ class RoBERTBiLSTMAttnNCRF(BERTNerModel):
     def create(cls,
                label_size,
                # BertEmbedder params
-               model_name='bert-base-multilingual-cased', mode="weighted", is_freeze=True,
+               model_name='xlm-roberta-base', mode="weighted", is_freeze=True,
                # BiLSTM
                hidden_dim=512, rnn_layers=1, lstm_dropout=0.3,
                # Attn params
