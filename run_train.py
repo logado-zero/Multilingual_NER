@@ -113,7 +113,7 @@ if __name__ == "__main__":
     #Create Learner Class for model
     learner = NerLearner(
         model, data, best_model_path = check_point_path,
-        t_total=args.num_epochs * len(data.train_dl), lr=0.0001)
+        t_total=args.num_epochs * len(data.train_dl), lr=0.0001,sup_labels= ["B-MISC","I-MISC","B-PER","I-PER","B-LOC","I-LOC","B-ORG","I-ORG"])
 
     print('Number params of model :',model.get_n_trainable_params())
     #Start training......
