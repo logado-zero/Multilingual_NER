@@ -72,7 +72,7 @@ if __name__ == "__main__":
         valid_df_path=valid_df_path,
         idx2labels_path=idx2labels_path,
         clear_cache=False,
-        batch_size=8,
+        batch_size=4,
         markup = "BIO",
         device=device
         )

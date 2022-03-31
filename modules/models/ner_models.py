@@ -149,3 +149,49 @@ class BERTBiLSTMAttnNCRF(BERTNerModel):
         crf = NCRFDecoder.create(
             label_size, hidden_dim, crf_dropout, nbest=nbest, device=device)
         return cls(embeddings, lstm, attn, crf, device)
+
+
+class RoBERTBiLSTMAttnNCRF(BERTNerModel):
+
+    def __init__(self, embeddings, lstm, attn, crf, device="cuda"):
+        super(RoBERTBiLSTMAttnNCRF, self).__init__()
+        self.embeddings = embeddings
+        self.lstm = lstm
+        self.attn = attn
+        self.crf = crf
+        self.to(device)
+
+    def forward(self, batch):
+        input_, labels_mask, input_type_ids = batch[:3]
+        input_embeddings = self.embeddings(batch)
+        output, _ = self.lstm.forward(input_embeddings, labels_mask)
+        output, _ = self.attn(output, output, output, None)
+        return self.crf.forward(output, labels_mask)
+
+    def score(self, batch):
+        input_, labels_mask, input_type_ids, labels = batch
+        input_embeddings = self.embeddings(batch)
+        output, _ = self.lstm.forward(input_embeddings, labels_mask)
+        output, _ = self.attn(output, output, output, None)
+        return self.crf.score(output, labels_mask, labels)
+
+    @classmethod
+    def create(cls,
+               label_size,
+               # BertEmbedder params
+               model_name='bert-base-multilingual-cased', mode="weighted", is_freeze=True,
+               # BiLSTM
+               hidden_dim=512, rnn_layers=1, lstm_dropout=0.3,
+               # Attn params
+               embedding_size=768, key_dim=64, val_dim=64, num_heads=3, attn_dropout=0.3,
+               # NCRFDecoder params
+               crf_dropout=0.5, nbest=1,
+               # Global params
+               device="cuda"):
+        embeddings = RoBERTEmbedder.create(model_name=model_name, device=device, mode=mode, is_freeze=is_freeze)
+        lstm = BiLSTM.create(
+            embedding_size=embedding_size, hidden_dim=hidden_dim, rnn_layers=rnn_layers, dropout=lstm_dropout)
+        attn = MultiHeadAttention(key_dim, val_dim, hidden_dim, num_heads, attn_dropout)
+        crf = NCRFDecoder.create(
+            label_size, hidden_dim, crf_dropout, nbest=nbest, device=device)
+        return cls(embeddings, lstm, attn, crf, device)
