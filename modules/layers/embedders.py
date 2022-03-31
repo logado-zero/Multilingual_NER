@@ -12,8 +12,8 @@ class BERTEmbedder(torch.nn.Module):
 
     def init_weights(self):
         if self.config["mode"] == "weighted":
-            torch.nn.init.xavier_normal(self.bert_gamma)
-            torch.nn.init.xavier_normal(self.bert_weights)
+            torch.nn.init.xavier_normal_(self.bert_gamma)
+            torch.nn.init.xavier_normal_(self.bert_weights)
 
     @classmethod
     def create(
@@ -74,8 +74,8 @@ class AutoEmbedder(torch.nn.Module):
 
     def init_weights(self):
         if self.config["mode"] == "weighted":
-            torch.nn.init.xavier_normal(self.bert_gamma)
-            torch.nn.init.xavier_normal(self.bert_weights)
+            torch.nn.init.xavier_normal_(self.bert_gamma)
+            torch.nn.init.xavier_normal_(self.bert_weights)
 
     @classmethod
     def create(
