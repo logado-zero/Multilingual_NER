@@ -36,6 +36,20 @@ if __name__ == "__main__":
         help="model path",
     )
 
+    parser.add_argument(
+        "--bert_embedding",
+        default="True",
+        type=str,
+        help="Check if use BERT Embedding or not",
+    )
+
+    parser.add_argument(
+        "--embedder_name",
+        default="xlm-roberta-base",
+        type=str,
+        help="Name embedder want to use ",
+    )
+    
     args = parser.parse_args()
 
     # seed_all(seed_value=args.seed)
