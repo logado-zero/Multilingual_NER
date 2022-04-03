@@ -64,7 +64,7 @@ class BERTEmbedder(torch.nn.Module):
 #############RoBERT#####################
 class AutoEmbedder(torch.nn.Module):
     def __init__(self, model, config):
-        super(BERTEmbedder, self).__init__()
+        super(AutoEmbedder, self).__init__()
         self.config = config
         self.model = model
         if self.config["mode"] == "weighted":

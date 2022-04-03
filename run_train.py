@@ -41,8 +41,8 @@ if __name__ == "__main__":
 
     parser.add_argument(
         "--bert_embedding",
-        default=True,
-        type=bool,
+        default="True",
+        type=str,
         help="Check if use BERT Embedding or not",
     )
 
@@ -81,7 +81,7 @@ if __name__ == "__main__":
 
 
     # Load data set
-    if args.bert_embedding:
+    if args.bert_embedding == "True":
         data = bert_data.LearnData.create(
             train_df_path=train_df_path,
             valid_df_path=valid_df_path,

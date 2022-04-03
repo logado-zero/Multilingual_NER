@@ -3,7 +3,7 @@ import os
 import glob2
 import torch
 from modules.data import bert_data
-from modules.models.ner_models import BERTBiLSTMAttnNCRF
+from modules.models.ner_models import BERTBiLSTMAttnNCRF,AutoBiLSTMAttnNCRF
 from modules.train.train import NerLearner
 
 
@@ -39,6 +39,19 @@ if __name__ == "__main__":
         help="file save path for continuing training",
     )
 
+    parser.add_argument(
+        "--bert_embedding",
+        default="True",
+        type=str,
+        help="Check if use BERT Embedding or not",
+    )
+
+    parser.add_argument(
+        "--embedder_name",
+        default="xlm-roberta-base",
+        type=str,
+        help="Name embedder want to use ",
+    )
 
     # seed_all(seed_value=args.seed)
     device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -66,19 +79,37 @@ if __name__ == "__main__":
         check_point_path = args.checkpoint
 
 
-    # Load data set
-    data = bert_data.LearnData.create(
-        train_df_path=train_df_path,
-        valid_df_path=valid_df_path,
-        idx2labels_path=idx2labels_path,
-        clear_cache=False,
-        batch_size=4,
-        markup = "BIO",
-        device=device
-        )
+    
 
-    #Create model
-    model = BERTBiLSTMAttnNCRF.create(len(data.train_ds.idx2label), crf_dropout=0.3, is_freeze=False, device=device)
+    # Load data set
+    if args.bert_embedding == "True":
+        data = bert_data.LearnData.create(
+            train_df_path=train_df_path,
+            valid_df_path=valid_df_path,
+            idx2labels_path=idx2labels_path,
+            clear_cache=True,
+            batch_size=8,
+            markup = "BIO",
+            device=device
+            )
+
+        #Create model
+        model = BERTBiLSTMAttnNCRF.create(len(data.train_ds.idx2label), crf_dropout=0.3, is_freeze=False, device=device)
+    else :
+        data = bert_data.LearnData.create(
+            train_df_path=train_df_path,
+            valid_df_path=valid_df_path,
+            idx2labels_path=idx2labels_path,
+            clear_cache=True,
+            batch_size=8,
+            markup = "BIO",
+            device=device,
+            bert_embedding = False,
+            model_name = args.embedder_name,
+            )
+
+        #Create model
+        model = AutoBiLSTMAttnNCRF.create(len(data.train_ds.idx2label), crf_dropout=0.3, is_freeze=False, device=device,model_name=args.embedder_name)
 
     
     #Create Learner Class for model
